@@ -2,27 +2,32 @@
 #
 # Install PostgreSQL
 #
-- name: PostgreSQL | Add PostgreSQL repository
+- name: PostgreSQLリポジトリの追加
   yum:
     name: "{{ postgresql_yum_repository_url }}"
     state: present
 
-- name: PostgreSQL | Make sure the dependencies are installed
+- name: 依存をインストール
   yum:
     name: "{{ item }}"
     state: present
     update_cache: yes
   with_items: ["python-psycopg2", "python-pycurl", "glibc-common"]
 
-- name: PostgreSQL | Install PostgreSQL
+- name: "インストール {{ postgresql_version_terse }}"
   yum:
     name: "{{ item }}"
     state: present
-  environment: postgresql_env
+#  environment: postgresql_env
   with_items:
     - "postgresql{{ postgresql_version_terse }}-server"
     - "postgresql{{ postgresql_version_terse }}-devel"
     - "postgresql{{ postgresql_version_terse }}"
 
-- name: PostgreSQL | link bin for gem pg
-  command: ln -sf /usr/pgsql-9.5/bin/pg_config /usr/bin
+- name: rubyのpg gem用にpg_configをパスに通す
+  file:
+    src: "{{ postgresql_bin_directory }}/pg_config"
+    dest: /usr/bin/pg_config
+    state: link
+    force: yes
+    

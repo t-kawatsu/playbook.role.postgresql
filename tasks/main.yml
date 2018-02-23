@@ -1,16 +1,16 @@
 ---
-- include: install.yml
+- import_tasks: install.yml
   tags: [postgresql, postgresql-install]
 
-- include: configure.yml
+- import_tasks: configure.yml
   tags: [postgresql, postgresql-configure]
 
-- include: users.yml
+- import_tasks: users.yml
   tags: [postgresql, postgresql-users]
 
-- include: databases.yml
+- import_tasks: databases.yml
   tags: [postgresql, postgresql-databases]
 
-- include: users_privileges.yml
+- import_tasks: users_privileges.yml
   tags: [postgresql, postgresql-databases]
 

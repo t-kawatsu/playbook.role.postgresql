@@ -1,10 +1,10 @@
 ---
-- name: PostgreSQL | Ensure PostgreSQL is running
+- name: "PostgreSQLサービスが稼働中かどうか確認"
   service:
     name: "{{ postgresql_service_name }}"
     state: started
 
-- name: PostgreSQL | Make sure the PostgreSQL databases are present
+- name: "データベースが存在するかどうか確認・作成"
   postgresql_db:
     name: "{{ item.name }}"
     encoding: "{{ postgresql_encoding }}"
@@ -13,7 +13,7 @@
     template: "template0"
     state: present
     login_user: "{{ postgresql_admin_user }}"
-  sudo: yes
-  sudo_user: "{{ postgresql_admin_user }}"
-  with_items: postgresql_databases
+  become: yes
+  become_user: "{{ postgresql_admin_user }}"
+  with_items: "{{ postgresql_databases }}"
   when: postgresql_databases|length > 0

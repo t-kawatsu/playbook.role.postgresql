@@ -1,5 +1,5 @@
 ---
-- name: PostgreSQL | Update the user privileges
+- name: "ユーザー権限を更新"
   postgresql_user:
     name: "{{ item.name }}"
     db: "{{ item.db | default(omit) }}"
@@ -8,7 +8,7 @@
     login_host: "{{ item.host | default(omit) }}"
     login_user: "{{ postgresql_admin_user }}"
     role_attr_flags: "{{ item.role_attr_flags | default(omit) }}"
-  sudo: yes
-  sudo_user: "{{ postgresql_admin_user }}"
-  with_items: postgresql_user_privileges
+  become: yes
+  become_user: "{{ postgresql_admin_user }}"
+  with_items: "{{ postgresql_user_privileges }}"
   when: postgresql_users|length > 0
